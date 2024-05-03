@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Article
+from .models import Article, Comment
 
 class ArticleDetailSerializer(serializers.ModelSerializer):
     like_count = serializers.IntegerField(read_only = True)
@@ -13,3 +13,9 @@ class ArticleDetailSerializer(serializers.ModelSerializer):
         representation = super().to_representation(instance)
         representation['like_count'] = instance.like_count.count()
         return representation
+
+class CommentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Comment
+        fields = "__all__"
+        read_only_fields = ("article",)
