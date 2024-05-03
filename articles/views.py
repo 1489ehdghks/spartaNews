@@ -1,14 +1,30 @@
 from django.shortcuts import render, get_object_or_404
-from django.http import JsonResponse, HttpResponse
-from django.core import serializers
-from rest_framework.decorators import api_view
-from rest_framework.response import Response
-from rest_framework.permissions import IsAuthenticated
-from rest_framework import status
 from rest_framework.views import APIView
-from .serializers import ArticleSerializer, ArticleDetailSerializer, CommentSerializer
+from rest_framework.response import Response
+from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from .models import Article, Comment
+from .serializers import ArticleDetailSerializer, CommentSerializer
+from django.core import serializers
 
+class ArticleDetailAPIView(APIView) :
+    permission_classes = [IsAuthenticatedOrReadOnly]
+    def get(self, request, article_id) :
+        article = get_object_or_404(Article, id = article_id)
+        serializer = ArticleDetailSerializer(article)
+        return Response(serializer.data)
+    def put(self, request, article_id) :
+        article = get_object_or_404(Article, id = article_id)
+        if article.user_id == request.user.id :
+            serializer = ArticleDetailSerializer(article, data = request.data, partial = True)
+            if serializer.is_valid(raise_exception=True) :
+                serializer.save()
+                return Response(serializer.data)
+        return Response(status=401)
+    def delete(self, request, article_id) :
+        article = get_object_or_404(Article, id = article_id)
+        if article.user_id == request.user.id :
+            article.delete()
+            return Response("No Article", status=204)
 
 class CommentListAPIView(APIView):
   # 댓글 조회하기
