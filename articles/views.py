@@ -33,3 +33,11 @@ class CommentDetailAPIView(APIView):
         comment.delete()
         data = {"id": f"{comment_id} is deleted."}
         return Response(data, status=status.HTTP_200_OK)
+
+  # 댓글 수정하기
+    def put(self, request, comment_id):
+        comment = get_object_or_404(Comment, pk=comment_id)
+        serializer = CommentSerializer(comment, data=request.data, partial=True)
+        if serializer.is_valid(raise_exception=True):
+            serializer.save()
+            return Response(serializer.data)
