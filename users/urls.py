@@ -16,3 +16,6 @@ urlpatterns = [
          views.ChangePasswordAPIView.as_view(), name='accounts_password'),
     path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
 ]
+
+
+# 할 일
