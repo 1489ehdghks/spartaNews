@@ -7,5 +7,12 @@ class Article(models.Model) :
     url = models.URLField()
     create_at = models.DateTimeField(auto_now_add=False)
     updated_at = models.DateTimeField(auto_now=False)
-    user_id = models.ForeignKey(settings.AUTH_USER_MODEL(), on_delete=models.CASCADE)
-    
+    user_id = models.ForeignKey(
+        settings.AUTH_USER_MODEL(), 
+        on_delete=models.CASCADE,
+        related_name = 'articles')
+    like_count = models.ManyToManyField(
+        settings.AUTH_USER_MODEL(),
+        related_name = 'like_articles',
+        null = True
+        )
