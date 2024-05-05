@@ -3,7 +3,7 @@ from .models import Article
 
 class ArticleDetailSerializer(serializers.ModelSerializer):
     like_count = serializers.IntegerField(read_only = True)
-    comments = CommentSerializer(many = True, read_only = True)
+    # comments = CommentSerializer(many = True, read_only = True)
 
     class Meta :
         model = Article
