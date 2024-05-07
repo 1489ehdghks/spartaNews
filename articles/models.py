@@ -11,10 +11,18 @@ class Article(models.Model) :
         settings.AUTH_USER_MODEL, 
         on_delete=models.CASCADE,
         related_name = 'articles')
-    like_count = models.ManyToManyField(
+
+class ArticleLike(models.Model) :
+    article = models.ForeignKey(Article, on_delete=models.CASCADE, related_name="article_likes")
+    user_id = models.ForeignKey(
+        settings.AUTH_USER_MODEL, 
+        on_delete=models.CASCADE, 
+        related_name="user_likes")
+    like_count =models.ForeignKey(
         settings.AUTH_USER_MODEL,
-        related_name = 'like_articles',
-        null = True
+        on_delete=models.CASCADE,
+        related_name = 'likes',
+        default=0
         )
 
 class Comment(models.Model):
