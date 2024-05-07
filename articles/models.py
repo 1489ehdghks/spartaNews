@@ -1,6 +1,15 @@
 from django.db import models
 from django.conf import settings
 
+
+class Comment(models.Model):
+    article = models.ForeignKey(Article, on_delete=models.CASCADE, related_name="comments")
+    content = models.TextField()
+    # 작성자 필드 추가
+    user_id = models.ForeignKey(User, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
 class Article(models.Model) :
     title = models.CharField(max_length=50)
     content = models.TextField()
@@ -16,11 +25,3 @@ class Article(models.Model) :
         related_name = 'like_articles',
         null = True
         )
-
-class Comment(models.Model):
-    article = models.ForeignKey(Article, on_delete=models.CASCADE, related_name="comments")
-    content = models.TextField()
-    # 작성자 필드 추가
-    author = models.ForeignKey(User, on_delete=models.CASCADE)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
