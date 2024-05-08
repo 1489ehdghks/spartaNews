@@ -17,11 +17,19 @@ class Article(models.Model) :
     create_at = models.DateTimeField(auto_now_add=False)
     updated_at = models.DateTimeField(auto_now=False)
     user_id = models.ForeignKey(
-        settings.AUTH_USER_MODEL(), 
+        settings.AUTH_USER_MODEL, 
         on_delete=models.CASCADE,
         related_name = 'articles')
-    like_count = models.ManyToManyField(
-        settings.AUTH_USER_MODEL(),
-        related_name = 'like_articles',
-        null = True
+
+class ArticleLike(models.Model) :
+    article = models.ForeignKey(Article, on_delete=models.CASCADE, related_name="article_likes")
+    user_id = models.ForeignKey(
+        settings.AUTH_USER_MODEL, 
+        on_delete=models.CASCADE, 
+        related_name="user_likes")
+    like_count =models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name = 'likes',
+        default=0
         )
