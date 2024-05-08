@@ -3,7 +3,7 @@ from django.contrib.auth import get_user_model
 from django.shortcuts import get_object_or_404
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from .serializers import UserSerializer
+from .serializers import UserDetailSerializer
 
 
 class UserAPIView(APIView):
@@ -12,6 +12,7 @@ class UserAPIView(APIView):
         data = request.data
         email = data.get("email")
         username = data.get("username")
+        gender = data.get("gender")
     # 유사성검사
         if not email or not username:
             return Response({"error": "email or username is required"}, status=400)
@@ -22,16 +23,23 @@ class UserAPIView(APIView):
         if get_user_model().objects.filter(username=username).exists():
             return Response({"error": "username exists"}, status=400)
 
+    # 선택적 성별 값 설정
+        # "M" (남성)과 "F" (여성)만 허용, 또는 값이 없는 경우
+        if gender not in ["M", "F", None]:
+            return Response({"error": "Invalid gender value"}, status=400)
+
         user = get_user_model().objects.create_user(
             username=username,
             email=email,
             password=data.get("password"),
+            gender=gender
         )
         return Response(
             {
                 "id": user.id,
                 "username": user.username,
                 "email": user.email,
+                "gender": user.gender
             },
             status=201,
         )
@@ -53,7 +61,7 @@ class UserDetailAPIView(APIView):
     # 유저 정보보기
     def get(self, request, username):
         user = get_object_or_404(get_user_model(), username=username)
-        serializer = UserSerializer(user)
+        serializer = UserDetailSerializer(user)
         return Response(serializer.data)
 
     # 계정 정보수정(email,nickname)
@@ -63,7 +71,8 @@ class UserDetailAPIView(APIView):
         if request.user != user:
             return Response({"error": "permission denied"}, status=403)
 
-        serializer = UserSerializer(user, data=request.data, partial=True)
+        serializer = UserDetailSerializer(
+            user, data=request.data, partial=True)
         serializer.is_valid(raise_exception=True)
         serializer.save()
 
