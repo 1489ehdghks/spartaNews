@@ -3,15 +3,17 @@ from django.contrib.auth import get_user_model
 from django.shortcuts import get_object_or_404
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from .serializers import UserSerializer
+from .serializers import UserDetailSerializer
 
 
 class UserAPIView(APIView):
+    # 회원가입
     def post(self, request):
         data = request.data
         email = data.get("email")
         username = data.get("username")
-
+        gender = data.get("gender")
+    # 유사성검사
         if not email or not username:
             return Response({"error": "email or username is required"}, status=400)
 
@@ -21,20 +23,28 @@ class UserAPIView(APIView):
         if get_user_model().objects.filter(username=username).exists():
             return Response({"error": "username exists"}, status=400)
 
+    # 선택적 성별 값 설정
+        # "M" (남성)과 "F" (여성)만 허용, 또는 값이 없는 경우
+        if gender not in ["M", "F", None]:
+            return Response({"error": "Invalid gender value"}, status=400)
+
         user = get_user_model().objects.create_user(
             username=username,
             email=email,
             password=data.get("password"),
+            gender=gender
         )
         return Response(
             {
                 "id": user.id,
                 "username": user.username,
                 "email": user.email,
+                "gender": user.gender
             },
             status=201,
         )
 
+    # 로그인 된 상태에서 비밀번호 입력하면 계정 탈퇴
     def delete(self, request):
         password = request.data.get("password")
         if not password:
@@ -48,19 +58,21 @@ class UserAPIView(APIView):
 
 
 class UserDetailAPIView(APIView):
+    # 유저 정보보기
     def get(self, request, username):
         user = get_object_or_404(get_user_model(), username=username)
-        serializer = UserSerializer(user)
+        serializer = UserDetailSerializer(user)
         return Response(serializer.data)
 
+    # 계정 정보수정(email,nickname)
     def put(self, request, username):
-
         user = get_object_or_404(get_user_model(), username=username)
 
         if request.user != user:
             return Response({"error": "permission denied"}, status=403)
 
-        serializer = UserSerializer(user, data=request.data, partial=True)
+        serializer = UserDetailSerializer(
+            user, data=request.data, partial=True)
         serializer.is_valid(raise_exception=True)
         serializer.save()
 
@@ -68,6 +80,7 @@ class UserDetailAPIView(APIView):
 
 
 class ChangePasswordAPIView(APIView):
+
     def put(self, request):
         user = request.user
         password = request.data.get("password")
