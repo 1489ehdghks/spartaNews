@@ -9,4 +9,3 @@ class Accounts(AbstractUser):
         default='', max_length=100, null=False, blank=False, unique=True)
     name = models.CharField(default='', max_length=100,
                             null=False, blank=False)
-

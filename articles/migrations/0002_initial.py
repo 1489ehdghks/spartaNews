@@ -18,16 +18,19 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='comment',
             name='author',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL),
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL),
         ),
         migrations.AddField(
             model_name='article',
             name='like_count',
-            field=models.ManyToManyField(null=True, related_name='like_articles', to=settings.AUTH_USER_MODEL),
+            field=models.ManyToManyField(
+                null=True, related_name='like_articles', to=settings.AUTH_USER_MODEL),
         ),
         migrations.AddField(
             model_name='article',
             name='user_id',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='articles', to=settings.AUTH_USER_MODEL),
+            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE,
+                                    related_name='articles', to=settings.AUTH_USER_MODEL),
         ),
     ]
