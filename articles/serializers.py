@@ -21,7 +21,7 @@ class ArticleLikeSerializer(serializers.ModelSerializer) :
         model = ArticleLike
         fields = "__all__"
 
-    def to_representation(self, instance):
-        representation = super().to_representation(instance)
-        representation['like_count'] = instance.like_count.count()
-        return representation
+    # def to_representation(self, instance):
+    #     representation = super().to_representation(instance)
+    #     representation['like_count'] = instance.like_count.count()
+    #     return representation

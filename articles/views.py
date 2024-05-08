@@ -1,10 +1,11 @@
 from django.shortcuts import render, get_object_or_404
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework.permissions import IsAuthenticatedOrReadOnly
-from .models import Article, Comment
-from .serializers import ArticleDetailSerializer, ArticleSerializer, CommentSerializer
+from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAuthenticated
+from .models import Article, ArticleLike, Comment
+from .serializers import ArticleDetailSerializer, ArticleLikeSerializer, ArticleSerializer, CommentSerializer
 from django.core import serializers
+from django.db.models import Q
 
 class ArticleListAPIView(APIView) :
     permission_classes = [IsAuthenticatedOrReadOnly]
@@ -72,3 +73,24 @@ class CommentDetailAPIView(APIView):
         if serializer.is_valid(raise_exception=True):
             serializer.save()
             return Response(serializer.data)
+        
+class ArticleLikeAPIView(APIView) :
+    permission_classes = [IsAuthenticated]
+    def post(self, request, article_id) :
+        article = get_object_or_404(Article, pk=article_id)
+        article_like = ArticleLike.objects.filter(user=request.user, article=article)
+        if not article_like.exists():
+            like = ArticleLike(user=request.user, article=article)
+            like.save()
+            return Response("Like",status=201)
+        else :
+            return Response("Already Exist", status=400)
+
+    def delete(self, request, article_id) :
+        article = get_object_or_404(Article, pk=article_id)
+        article_like = ArticleLike.objects.filter(user=request.user, article=article)
+        if article_like.exists():
+            article_like.delete()
+            return Response("Unlike",status=204)
+        else :
+            return Response("Not exist", status=400)
