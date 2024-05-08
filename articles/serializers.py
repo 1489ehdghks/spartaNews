@@ -1,7 +1,14 @@
 from rest_framework import serializers
 from .models import Article, Comment, ArticleLike
 
+class ReplySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Comment
+        fields = "__all__"
+
 class CommentSerializer(serializers.ModelSerializer):
+    # 대댓글 표시
+    replies = ReplySerializer(many=True, read_only=True)
     class Meta:
         model = Comment
         fields = "__all__"
@@ -23,6 +30,8 @@ class ArticleDetailSerializer(ArticleSerializer):
     # 댓글 수 표시 
     comments_count = serializers.IntegerField(source="comments.count", read_only=True)
     comments = CommentSerializer(many = True, read_only = True)
+    # 대댓글 표시
+    replies = ReplySerializer(many=True, read_only=True)
 
 class ArticleLikeSerializer(serializers.ModelSerializer) :
     class Meta :

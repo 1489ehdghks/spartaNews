@@ -9,6 +9,11 @@ class Comment(models.Model):
     user_id = models.ForeignKey(User, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    parent_comment = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True, related_name='replies')
+
+    class Meta:
+        db_table = 'comments'
+
 
 class Article(models.Model) :
     title = models.CharField(max_length=50)
