@@ -80,7 +80,6 @@ class UserDetailAPIView(APIView):
 
 
 class ChangePasswordAPIView(APIView):
-    #
     def put(self, request):
         user = request.user
         password = request.data.get("password")

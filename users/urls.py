@@ -17,8 +17,3 @@ urlpatterns = [
          views.ChangePasswordAPIView.as_view(), name='accounts_password'),
     path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
 ]
-
-
-# 할 일
-# 김동환 - 회원정보수정/
-# -프로필조회 이메일, 이름, 성별 -
