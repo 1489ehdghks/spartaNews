@@ -7,11 +7,12 @@ from .serializers import UserSerializer
 
 
 class UserAPIView(APIView):
+    # 회원가입
     def post(self, request):
         data = request.data
         email = data.get("email")
         username = data.get("username")
-
+    # 유사성검사
         if not email or not username:
             return Response({"error": "email or username is required"}, status=400)
 
@@ -35,6 +36,7 @@ class UserAPIView(APIView):
             status=201,
         )
 
+    # 로그인 된 상태에서 비밀번호 입력하면 계정 탈퇴
     def delete(self, request):
         password = request.data.get("password")
         if not password:
@@ -48,13 +50,14 @@ class UserAPIView(APIView):
 
 
 class UserDetailAPIView(APIView):
+    # 유저 정보보기
     def get(self, request, username):
         user = get_object_or_404(get_user_model(), username=username)
         serializer = UserSerializer(user)
         return Response(serializer.data)
 
+    # 계정 정보수정(email,nickname)
     def put(self, request, username):
-
         user = get_object_or_404(get_user_model(), username=username)
 
         if request.user != user:
@@ -68,6 +71,7 @@ class UserDetailAPIView(APIView):
 
 
 class ChangePasswordAPIView(APIView):
+    #
     def put(self, request):
         user = request.user
         password = request.data.get("password")
