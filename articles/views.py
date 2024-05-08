@@ -2,15 +2,9 @@ from django.shortcuts import render, get_object_or_404
 from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.response import Response
-<<<<<<< HEAD
 from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAuthenticated
 from .models import Article, ArticleLike, Comment
-from .serializers import ArticleDetailSerializer, ArticleLikeSerializer, ArticleSerializer, CommentSerializer
-=======
-from rest_framework.permissions import IsAuthenticatedOrReadOnly
-from .models import Article, Comment
-from .serializers import ArticleDetailSerializer, ArticleSerializer, CommentSerializer, ReplySerializer
->>>>>>> 4a7baa05fcd31f4186c6fe2f32215e9c82f2c460
+from .serializers import ArticleDetailSerializer, ArticleLikeSerializer, ArticleSerializer, CommentSerializer, ReplySerializer
 from django.core import serializers
 from django.db.models import Q
 
