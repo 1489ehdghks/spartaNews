@@ -1,6 +1,7 @@
 from django.shortcuts import render, get_object_or_404
 from rest_framework import status
 from rest_framework.views import APIView
+from rest_framework.generics import ListAPIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAuthenticated
 from .models import Article, ArticleLike, Comment
@@ -8,12 +9,11 @@ from .serializers import ArticleDetailSerializer, ArticleSerializer, CommentSeri
 from django.core import serializers
 from django.db.models import Q
 
-class ArticleListAPIView(APIView) :
+class ArticleListAPIView(ListAPIView) :
     permission_classes = [IsAuthenticatedOrReadOnly]
-    def get(self, request) :
-        articles = Article.objects.all().order_by('-create_at')
-        serializers = ArticleSerializer(articles, many = True)
-        return Response(serializers.data)
+    queryset = Article.objects.all().order_by('-create_at')
+    serializer_class = ArticleSerializer
+    # return Response(serializers.data)
     def post(self, request) :
         serializers = ArticleSerializer(data = request.data)
         if serializers.is_valid(raise_exception = True) :
