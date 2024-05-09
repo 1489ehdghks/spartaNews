@@ -53,6 +53,8 @@ GeekNews와 같은 레퍼런스를 토대로 뉴스 페이지를 만드는 프�
 <br/>
 
 ### 3. 개발 문서 - README.md , ERD Diagram, RESTful API 설계
+-  RESTful API
+![image](https://github.com/1489ehdghks/spartaNews/assets/157605815/5be6b081-2372-45c7-a909-deaefe1dbfce)
 
 <br/>
 <br/>
