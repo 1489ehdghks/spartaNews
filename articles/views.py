@@ -52,6 +52,7 @@ class ArticleDetailAPIView(APIView) :
 
 
 class CommentListAPIView(APIView):
+    permission_classes = [IsAuthenticatedOrReadOnly]
     # 댓글 조회하기
     def get(self, request, article_id):
         article = get_object_or_404(Article, pk=article_id)
@@ -64,28 +65,31 @@ class CommentListAPIView(APIView):
         article = get_object_or_404(Article, pk=article_id)
         serializer = CommentSerializer(data=request.data)
         if serializer.is_valid(raise_exception=True):
-            serializer.save(article=article)
+            serializer.save(user_id = request.user, article=article)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 
 class CommentDetailAPIView(APIView):
+    permission_classes = [IsAuthenticated]
     # 댓글 삭제하기
     def delete(self, request, comment_id):
         comment = get_object_or_404(Comment, pk=comment_id)
-        if comment.user_id == request.user.id :
+        if comment.user_id == request.user :
             comment.delete()
             data = {"id": f"{comment_id} is deleted."}
             return Response(data, status=status.HTTP_200_OK)
+        return Response(status=401)
 
     # 댓글 수정하기
     def put(self, request, comment_id):
         comment = get_object_or_404(Comment, pk=comment_id)
-        if comment.user_id == request.user.id :
+        if comment.user_id == request.user :
             serializer = CommentSerializer(
                 comment, data=request.data, partial=True)
             if serializer.is_valid(raise_exception=True):
                 serializer.save()
                 return Response(serializer.data)
+        return Response("no auth",status=401)
 
 
 class ArticleLikeAPIView(APIView) :
@@ -112,6 +116,7 @@ class ArticleLikeAPIView(APIView) :
 
 
 class CommentReplyAPIView(APIView):
+    permission_classes = [IsAuthenticated]
     # 대댓글 생성하기
     def post(self, request, comment_id):
         parent_comment = get_object_or_404(Comment, pk=comment_id)
@@ -121,6 +126,7 @@ class CommentReplyAPIView(APIView):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 class CommentReplyDetailAPIView(APIView):
+    permission_classes = [IsAuthenticatedOrReadOnly]
     # 대댓글 조회하기
     def get(self, request, parent_comment_id, reply_id):
         parent_comment = get_object_or_404(Comment, pk=parent_comment_id)
@@ -132,7 +138,7 @@ class CommentReplyDetailAPIView(APIView):
     def delete(self, request, parent_comment_id, reply_id):
         parent_comment = get_object_or_404(Comment, pk=parent_comment_id)
         reply = get_object_or_404(parent_comment.replies.all(), pk=reply_id)
-        if reply.user_id == request.user.id :
+        if reply.user_id == request.user :
             reply.delete() 
             return Response("re-comment delete ", status=status.HTTP_200_OK)
     
@@ -140,7 +146,7 @@ class CommentReplyDetailAPIView(APIView):
     def put(self, request, parent_comment_id, reply_id):
         parent_comment = get_object_or_404(Comment, pk=parent_comment_id)
         reply = get_object_or_404(parent_comment.replies.all(), pk=reply_id)
-        if reply.user_id == request.user.id :
+        if reply.user_id == request.user :
             serializer = ReplySerializer(reply, data=request.data, partial=True)
             if serializer.is_valid(raise_exception=True):
                 serializer.save()
