@@ -15,12 +15,12 @@ urlpatterns = [
         views.CommentDetailAPIView.as_view(),
         name="comment_detail",
     ),
-    path( # 대댓글 조회하기
+    path( # 대댓글 생성하기
         "comments/<int:comment_id>/reply/", 
         views.CommentReplyAPIView.as_view(), 
         name="comment_reply"
     ),
-    path( # 대댓글 삭제하기
+    path( # 대댓글 조회, 수정, 삭제하기
         "comments/<int:parent_comment_id>/replies/<int:reply_id>/", 
         views.CommentReplyDetailAPIView.as_view(), 
         name="comment_reply_detail"
