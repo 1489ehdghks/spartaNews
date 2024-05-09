@@ -39,11 +39,11 @@ GeekNews와 같은 레퍼런스를 토대로 뉴스 페이지를 만드는 프�
 
 ## 댓글 CRUD
 
-https://github.com/1489ehdghks/spartaNews/assets/159985538/99167eff-1c81-4beb-b92f-bfd1892b5b24
+![빈 문서 1001](https://github.com/1489ehdghks/spartaNews/assets/159985538/99167eff-1c81-4beb-b92f-bfd1892b5b24)
 
 
 ## 대댓글 CRUD
 
-https://github.com/1489ehdghks/spartaNews/assets/159985538/59d182a4-291b-4883-ab03-27e5365adf66
+![빈 문서 2001](https://github.com/1489ehdghks/spartaNews/assets/159985538/59d182a4-291b-4883-ab03-27e5365adf66)
 
 
