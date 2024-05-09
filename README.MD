@@ -1,6 +1,8 @@
 # 📰SpartaNews
 스파르타 AI 6기 심화 프로젝트
 
+<br/>
+
 # 📝프로젝트 소개
 스파르타 뉴스 : 
 GeekNews와 같은 레퍼런스를 토대로 뉴스 페이지를 만드는 프로젝트. article 관련 페이지와 account 관련 페이지를 django를 이용하여 만들고자 함.
