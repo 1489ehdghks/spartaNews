@@ -14,6 +14,7 @@ class Article(models.Model):
         settings.AUTH_USER_MODEL, 
         on_delete=models.CASCADE,
         related_name = 'articles')
+    
 
 class Comment(models.Model):
     article = models.ForeignKey(
@@ -33,13 +34,7 @@ class Comment(models.Model):
 class ArticleLike(models.Model):
     article = models.ForeignKey(
         Article, on_delete=models.CASCADE, related_name="article_likes")
-    user_id = models.ForeignKey(
+    user = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
         related_name="user_likes")
-    like_count = models.ForeignKey(
-        settings.AUTH_USER_MODEL,
-        on_delete=models.CASCADE,
-        related_name='likes',
-        default=0
-    )
