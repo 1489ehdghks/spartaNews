@@ -1,10 +1,12 @@
 from rest_framework import serializers
 from .models import Article, Comment, ArticleLike
 
+# 대댓글
 class ReplySerializer(serializers.ModelSerializer):
     class Meta:
         model = Comment
         fields = "__all__"
+        read_only_fields = ("article",)
 
 class CommentSerializer(serializers.ModelSerializer):
     # 대댓글 표시

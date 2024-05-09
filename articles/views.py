@@ -3,6 +3,7 @@ from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.generics import ListAPIView
 from rest_framework.response import Response
+from rest_framework import status
 from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAuthenticated
 from .models import Article, ArticleLike, Comment
 from .serializers import ArticleDetailSerializer, ArticleSerializer, CommentSerializer, ReplySerializer
@@ -102,34 +103,34 @@ class ArticleLikeAPIView(APIView) :
 
 
 class CommentReplyAPIView(APIView):
-    # 대댓글 조회하기
-    def get(self, request, parent_comment_id, reply_id):
-        parent_comment = get_object_or_404(Comment, pk=parent_comment_id)
-        reply = get_object_or_404(parent_comment.replies.all(), pk=reply_id)
-        serializer = CommentSerializer(reply)
-        return Response(serializer.data)
-
     # 대댓글 생성하기
-    def post(self, request, parent_comment_id):
-        parent_comment = get_object_or_404(Comment, pk=parent_comment_id)
-        serializer = CommentSerializer(data=request.data)
+    def post(self, request, comment_id):
+        parent_comment = get_object_or_404(Comment, pk=comment_id)
+        serializer = ReplySerializer(data=request.data)
         if serializer.is_valid(raise_exception=True):
             serializer.save(article=parent_comment.article, parent_comment=parent_comment)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 class CommentReplyDetailAPIView(APIView):
+  # 대댓글 조회하기
+    def get(self, request, parent_comment_id, reply_id):
+        parent_comment = get_object_or_404(Comment, pk=parent_comment_id)
+        reply = get_object_or_404(parent_comment.replies.all(), pk=reply_id)
+        serializer = ReplySerializer(reply)
+        return Response(serializer.data)
+
     # 대댓글 삭제하기
     def delete(self, request, parent_comment_id, reply_id):
         parent_comment = get_object_or_404(Comment, pk=parent_comment_id)
         reply = get_object_or_404(parent_comment.replies.all(), pk=reply_id)
         reply.delete()
-        return Response("re-comment delete", status=status.HTTP_200_OK)
+        return Response("re-comment delete ", status=status.HTTP_200_OK)
     
     # 대댓글 수정하기
     def put(self, request, parent_comment_id, reply_id):
         parent_comment = get_object_or_404(Comment, pk=parent_comment_id)
         reply = get_object_or_404(parent_comment.replies.all(), pk=reply_id)
-        serializer = CommentSerializer(reply, data=request.data, partial=True)
+        serializer = ReplySerializer(reply, data=request.data, partial=True)
         if serializer.is_valid(raise_exception=True):
             serializer.save()
             return Response(serializer.data)
