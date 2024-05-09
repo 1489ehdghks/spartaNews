@@ -20,11 +20,6 @@ GeekNews와 같은 레퍼런스를 토대로 뉴스 페이지를 만드는 프�
 
 <br/>
 
-## 🚀 ERD
-![20240503_113643](https://github.com/1489ehdghks/spartaNews/assets/159985538/93dfdacf-5df4-4497-a6a5-019f1e5ea56b)
-
-<br/>
-
 ## ✅주요 기능
 
 <br/>
@@ -60,6 +55,12 @@ GeekNews와 같은 레퍼런스를 토대로 뉴스 페이지를 만드는 프�
 [API notion 이동](https://www.notion.so/teamsparta/87bf62f0dad248a0962146b68ebbce7c?v=c8e06e5871e4496e9698ad2dc97c0bc7)
 
 <br/>
+<br/>
+
+
+## 🚀 ERD
+![20240503_113643](https://github.com/1489ehdghks/spartaNews/assets/159985538/93dfdacf-5df4-4497-a6a5-019f1e5ea56b)
+
 <br/>
 
 ## ✅ 댓글, 대댓글 포스트맨 구현
