@@ -9,13 +9,15 @@ const TopLayout = () => {
                 <div className="text-lg font-semibold">GeekNews</div>
                 <div className="space-x-4">
                     <Link to="/latest" className="text-blue-500 hover:text-blue-600">최신글</Link>
-                    <Link to="/magazine" className="text-blue-500 hover:text-blue-600">매거진</Link>
-                    <Link to="/ask" className="text-blue-500 hover=text-blue-600">Ask</Link>
-                    <Link to="/show" className="text-blue-500 hover:text-blue-600">Show</Link>
-                    <Link to="/gn-plus" className="text-blue-500 hover=text-blue-600">GN+</Link>
+                    <Link to="/magazine" className="text-blue-500 hover:text-blue-600">인기글</Link>
+                    <Link to="/ask" className="text-blue-500 hover=text-blue-600">글등록</Link>
                     <Link to="/weekly" className="text-blue-500 hover=text-blue-600">Weekly</Link>
+                    <Link to="/" className="text-blue-500 hover=text-blue-600">/</Link>
+                    <Link to="/userinfo" className="text-blue-500 hover:text-blue-600">내정보</Link>
+                    <Link to="/show" className="text-blue-500 hover:text-blue-600">화이팅</Link>
+
                 </div>
-                <input type="text" placeholder="로그인" className="input-field" />
+                <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">로그인</button>
             </div>
         </div>
     );
