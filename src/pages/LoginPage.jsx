@@ -1,6 +1,7 @@
 // src/components/LoginPage.js
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { AuthContext } from '../process/AuthContext';
 import axios from 'axios';
 
 const LoginPage = () => {
@@ -8,6 +9,7 @@ const LoginPage = () => {
     const [password, setPassword] = useState('');
     const [keepLoggedIn, setKeepLoggedIn] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');
+    const { login } = useContext(AuthContext);
     const navigate = useNavigate();
 
     const handleLogin = async (e) => {
@@ -19,22 +21,22 @@ const LoginPage = () => {
             });
             console.log("response", response)
             const { access, refresh } = response.data;
-            localStorage.setItem('access_token', access);
-            localStorage.setItem('refresh_token', refresh);
-            if (keepLoggedIn) {
-                localStorage.setItem('keep_logged_in', 'true');
-            }
-            console.log("keepLoggedIn:", keepLoggedIn)
+            localStorage.setItem('accessToken', access);
+            localStorage.setItem('refreshToken', refresh);
+
+            login();
             console.log("access:", access)
             console.log("refresh:", refresh)
+
+            console.log('로그인 성공');
             setErrorMessage('');
-            navigate('/');
+            navigate(-1);
         } catch (error) {
             if (error.response && error.response.data) {
                 // 서버에서 반환하는 구체적인 에러 메시지 출력
-                setErrorMessage(`회원가입 실패: ${JSON.stringify(error.response.data)}`);
+                setErrorMessage(`로그인 실패: ${JSON.stringify(error.response.data)}`);
             } else {
-                setErrorMessage('회원가입에 실패했습니다. 다시 시도하세요.');
+                setErrorMessage('로그인에 실패했습니다. 다시 시도하세요.');
             }
         }
     };

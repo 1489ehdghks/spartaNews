@@ -10,6 +10,8 @@ const MainPage = () => {
     const [previousPage, setPreviousPage] = useState(null);
     const [error, setError] = useState(null);
     const [currentPageUrl, setCurrentPageUrl] = useState('http://localhost:8000/articles/');
+    const [currentPage, setCurrentPage] = useState(1);
+    const [totalPages, setTotalPages] = useState(1);
 
     useEffect(() => {
         const fetchArticles = async () => {
@@ -20,6 +22,7 @@ const MainPage = () => {
                 setArticles(data.results);
                 setNextPage(data.next);
                 setPreviousPage(data.previous);
+                setTotalPages(Math.ceil(data.count / 5));
             } catch (err) {
                 setError('게시글을 가져오는 데 실패했습니다.');
             }
@@ -28,8 +31,25 @@ const MainPage = () => {
         fetchArticles();
     }, [currentPageUrl]);
 
-    const handlePageChange = (url) => {
+    const handlePageChange = (url, pageNumber) => {
         setCurrentPageUrl(url);
+        setCurrentPage(pageNumber);
+    };
+
+    const renderPaginationButtons = () => {
+        const buttons = [];
+        for (let page = 1; page <= totalPages; page++) {
+            buttons.push(
+                <button
+                    key={page}
+                    onClick={() => handlePageChange(`http://localhost:8000/articles/?page=${page}`, page)}
+                    className={`py-2 px-4 rounded ${page === currentPage ? 'underline font-bold' : 'bg-gray-200 hover:bg-gray-300 text-gray-800'}`}
+                >
+                    {page}
+                </button>
+            );
+        }
+        return buttons;
     };
 
     return (
@@ -38,47 +58,38 @@ const MainPage = () => {
                 {error && <p className="text-red-600">{error}</p>}
                 {articles.length === 0 && !error && <p>게시글이 없습니다.</p>}
                 {articles.map((article) => (
-
-
-
                     <div key={article.id} className="news-item border-b border-gray-200 py-4">
-
                         <a href={article.url} className="news-link text-blue-500 text-lg font-semibold">{article.title}</a>
-
                         <p className="news-description text-gray-600">
-                            <Link to={`/articles/${article.id}`} >
+                            <Link to={`/articles/${article.id}`}>
                                 {article.content}
                             </Link>
                         </p>
-
                         <div className="news-meta text-gray-500 text-sm">작성일: {new Date(article.create_at).toLocaleDateString()}</div>
                     </div>
-
-
-
-
                 ))}
                 <div className="flex justify-between mt-6">
-                    {previousPage && (
-                        <button
-                            onClick={() => handlePageChange(previousPage)}
-                            className="bg-gray-200 hover:bg-gray-300 text-gray-800 py-2 px-4 rounded"
-                        >
-                            이전
-                        </button>
-                    )}
-                    {nextPage && (
-                        <button
-                            onClick={() => handlePageChange(nextPage)}
-                            className="bg-gray-200 hover:bg-gray-300 text-gray-800 py-2 px-4 rounded"
-                        >
-                            다음
-                        </button>
-                    )}
+                    <button
+                        onClick={() => handlePageChange(previousPage, currentPage - 1)}
+                        disabled={!previousPage}
+                        className={`py-2 px-4 rounded ${!previousPage ? 'bg-gray-100 text-gray-400 cursor-not-allowed' : 'bg-gray-200 hover:bg-gray-300 text-gray-800'}`}
+                    >
+                        이전
+                    </button>
+                    <div className="flex gap-2">
+                        {renderPaginationButtons()}
+                    </div>
+
+                    <button
+                        onClick={() => handlePageChange(nextPage, currentPage + 1)}
+                        disabled={!nextPage}
+                        className={`py-2 px-4 rounded ${!nextPage ? 'bg-gray-100 text-gray-400 cursor-not-allowed' : 'bg-gray-200 hover:bg-gray-300 text-gray-800'}`}
+                    >
+                        다음
+                    </button>
                 </div>
             </main>
         </div>
     );
 };
-
 export default MainPage;

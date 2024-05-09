@@ -26,6 +26,8 @@ const SignupPage = () => {
                 email,
                 password,
             });
+            const { id } = response.data;
+            localStorage.setItem('userId', id);
             console.log("response:", response)
             console.log("username:", username)
             navigate('/login');

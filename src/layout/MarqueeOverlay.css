@@ -1,0 +1,170 @@
+.marquee-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 999;
+    pointer-events: none;
+    padding: 1rem;
+    text-align: center;
+}
+
+.colorful-text {
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.colorful-1 {
+    animation: rainbow-1 3s infinite linear;
+}
+
+.colorful-2 {
+    animation: rainbow-2 3s infinite linear 0.5s;
+    /* Start after a 0.5s delay */
+}
+
+.colorful-3 {
+    animation: rainbow-3 3s infinite linear 1s;
+    /* Start after a 1s delay */
+}
+
+.colorful-4 {
+    animation: rainbow-4 3s infinite linear 1.5s;
+    /* Start after a 1.5s delay */
+}
+
+.colorful-5 {
+    animation: rainbow-5 3s infinite linear 2s;
+    /* Start after a 2s delay */
+}
+
+/* Keyframes for each marquee to vary initial colors */
+@keyframes rainbow-1 {
+    0% {
+        color: red;
+    }
+
+    20% {
+        color: yellow;
+    }
+
+    40% {
+        color: blue;
+    }
+
+    60% {
+        color: green;
+    }
+
+    80% {
+        color: violet;
+    }
+
+    100% {
+        color: red;
+    }
+}
+
+@keyframes rainbow-2 {
+    0% {
+        color: green;
+    }
+
+    20% {
+        color: orange;
+    }
+
+    40% {
+        color: indigo;
+    }
+
+    60% {
+        color: red;
+    }
+
+    80% {
+        color: yellow;
+    }
+
+    100% {
+        color: green;
+    }
+}
+
+@keyframes rainbow-3 {
+    0% {
+        color: violet;
+    }
+
+    20% {
+        color: blue;
+    }
+
+    40% {
+        color: orange;
+    }
+
+    60% {
+        color: yellow;
+    }
+
+    80% {
+        color: indigo;
+    }
+
+    100% {
+        color: violet;
+    }
+}
+
+@keyframes rainbow-4 {
+    0% {
+        color: blue;
+    }
+
+    20% {
+        color: yellow;
+    }
+
+    40% {
+        color: red;
+    }
+
+    60% {
+        color: green;
+    }
+
+    80% {
+        color: violet;
+    }
+
+    100% {
+        color: blue;
+    }
+}
+
+@keyframes rainbow-5 {
+    0% {
+        color: orange;
+    }
+
+    20% {
+        color: green;
+    }
+
+    40% {
+        color: red;
+    }
+
+    60% {
+        color: indigo;
+    }
+
+    80% {
+        color: violet;
+    }
+
+    100% {
+        color: orange;
+    }
+}
