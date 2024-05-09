@@ -16,7 +16,7 @@ urlpatterns = [
         views.CommentDetailAPIView.as_view(),
         name="comment_detail",
     ),
-    path( # 대댓글 생성하기
+    path( # 대댓글 생성
         "comments/<int:comment_id>/reply/", 
         views.CommentReplyAPIView.as_view(), 
         name="comment_reply"

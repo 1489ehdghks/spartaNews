@@ -124,7 +124,7 @@ class CommentReplyDetailAPIView(APIView):
         parent_comment = get_object_or_404(Comment, pk=parent_comment_id)
         reply = get_object_or_404(parent_comment.replies.all(), pk=reply_id)
         reply.delete()
-        return Response("re-comment delete", status=status.HTTP_200_OK)
+        return Response("re-comment delete ", status=status.HTTP_200_OK)
     
     # 대댓글 수정하기
     def put(self, request, parent_comment_id, reply_id):
