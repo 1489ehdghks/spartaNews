@@ -24,7 +24,11 @@ class CommentSerializer(serializers.ModelSerializer):
 class ArticleSerializer(serializers.ModelSerializer) :
     class Meta :
         model = Article
-        fields = '__all__'
+        exclude = ['user_id']
+
+    def create(self, validated_data):
+        validated_data['user_id'] = self.context['request'].user
+        return super().create(validated_data)
 
 class ArticleDetailSerializer(ArticleSerializer):
     # like_count = serializers.IntegerField(source="",read_only = True)

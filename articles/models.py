@@ -4,13 +4,13 @@ from django.conf import settings
 class Article(models.Model):
     title = models.CharField(max_length=50)
     content = models.TextField()
-    url = models.URLField()
-    create_at = models.DateTimeField(auto_now_add=False)
-    updated_at = models.DateTimeField(auto_now=False)
+    url = models.URLField(null=True, blank=True)
+    create_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
     user_id = models.ForeignKey(
-        settings.AUTH_USER_MODEL, 
+        settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
-        related_name = 'articles')
+        related_name='articles')
     
 
 class Comment(models.Model):
