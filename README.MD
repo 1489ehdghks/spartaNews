@@ -33,3 +33,17 @@ GeekNews와 같은 레퍼런스를 토대로 뉴스 페이지를 만드는 프�
 ### 8. 대댓글 조회, 생성, 수정, 삭제
 
 ## 3. 개발 문서 - README.md , ERD Diagram, RESTful API 설계
+
+
+# ✅ 댓글, 대댓글 포스트맨 구현
+
+## 댓글 CRUD
+
+https://github.com/1489ehdghks/spartaNews/assets/159985538/99167eff-1c81-4beb-b92f-bfd1892b5b24
+
+
+## 대댓글 CRUD
+
+https://github.com/1489ehdghks/spartaNews/assets/159985538/59d182a4-291b-4883-ab03-27e5365adf66
+
+
