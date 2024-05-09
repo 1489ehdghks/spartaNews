@@ -6,7 +6,7 @@ class ReplySerializer(serializers.ModelSerializer):
     class Meta:
         model = Comment
         fields = "__all__"
-        read_only_fields = ("article",)
+        read_only_fields = ("article","user_id")
 
 class CommentSerializer(serializers.ModelSerializer):
     # 대댓글 표시
@@ -14,7 +14,7 @@ class CommentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Comment
         fields = "__all__"
-        read_only_fields = ("article",)
+        read_only_fields = ("article","user_id")
 
     # 댓글에 article 표시 없앰
     def to_representation(self, instance):
@@ -26,9 +26,10 @@ class ArticleSerializer(serializers.ModelSerializer) :
     class Meta :
         model = Article
         fields = '__all__'
+        read_only_fields = ("user_id",)
 
 class ArticleDetailSerializer(ArticleSerializer):
-    # like_count = serializers.IntegerField(source="",read_only = True)
+    like_count = serializers.IntegerField(read_only = True)
     # 댓글 수 표시 
     comments_count = serializers.IntegerField(source="comments.count", read_only=True)
     comments = CommentSerializer(many = True, read_only = True)
