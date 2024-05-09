@@ -1,11 +1,13 @@
 from django.shortcuts import render, get_object_or_404
+from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-from rest_framework.permissions import IsAuthenticatedOrReadOnly
-from .models import Article, Comment
+from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAuthenticated
+from .models import Article, ArticleLike, Comment
 from .serializers import ArticleDetailSerializer, ArticleSerializer, CommentSerializer, ReplySerializer
 from django.core import serializers
+from django.db.models import Q
 
 class ArticleListAPIView(APIView) :
     permission_classes = [IsAuthenticatedOrReadOnly]
@@ -42,6 +44,7 @@ class ArticleDetailAPIView(APIView) :
             article.delete()
             return Response("No Article", status=204)
 
+
 class CommentListAPIView(APIView):
   # 댓글 조회하기
     def get(self, request, article_id):
@@ -49,7 +52,7 @@ class CommentListAPIView(APIView):
         comments = article.comments.all()
         serializer = CommentSerializer(comments, many=True)
         return Response(serializer.data)
-  
+
   # 댓글 생성하기
     def post(self, request, article_id):
         article = get_object_or_404(Article, pk=article_id)
@@ -57,6 +60,7 @@ class CommentListAPIView(APIView):
         if serializer.is_valid(raise_exception=True):
             serializer.save(article=article)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
+
 
 class CommentDetailAPIView(APIView):
   # 댓글 삭제하기
@@ -69,10 +73,33 @@ class CommentDetailAPIView(APIView):
   # 댓글 수정하기
     def put(self, request, comment_id):
         comment = get_object_or_404(Comment, pk=comment_id)
-        serializer = CommentSerializer(comment, data=request.data, partial=True)
+        serializer = CommentSerializer(
+            comment, data=request.data, partial=True)
         if serializer.is_valid(raise_exception=True):
             serializer.save()
             return Response(serializer.data)
+
+
+class ArticleLikeAPIView(APIView) :
+    permission_classes = [IsAuthenticated]
+    def post(self, request, article_id) :
+        article = get_object_or_404(Article, pk=article_id)
+        article_like = ArticleLike.objects.filter(user=request.user, article=article)
+        if not article_like.exists():
+            like = ArticleLike(user=request.user, article=article)
+            like.save()
+            return Response("Like",status=201)
+        else :
+            return Response("Already Exist", status=400)
+
+    def delete(self, request, article_id) :
+        article = get_object_or_404(Article, pk=article_id)
+        article_like = ArticleLike.objects.filter(user=request.user, article=article)
+        if article_like.exists():
+            article_like.delete()
+            return Response("Unlike",status=204)
+        else :
+            return Response("Not exist", status=400)
 
 
 class CommentReplyAPIView(APIView):
@@ -97,7 +124,7 @@ class CommentReplyDetailAPIView(APIView):
         parent_comment = get_object_or_404(Comment, pk=parent_comment_id)
         reply = get_object_or_404(parent_comment.replies.all(), pk=reply_id)
         reply.delete()
-        return Response(status=status.HTTP_200_OK)
+        return Response("re-comment delete", status=status.HTTP_200_OK)
     
     # 대댓글 수정하기
     def put(self, request, parent_comment_id, reply_id):

@@ -27,19 +27,14 @@ class ArticleSerializer(serializers.ModelSerializer) :
         fields = '__all__'
 
 class ArticleDetailSerializer(ArticleSerializer):
-    like_count = serializers.IntegerField(read_only = True)
+    # like_count = serializers.IntegerField(source="",read_only = True)
     # 댓글 수 표시 
     comments_count = serializers.IntegerField(source="comments.count", read_only=True)
     comments = CommentSerializer(many = True, read_only = True)
     # 대댓글 표시
     replies = ReplySerializer(many=True, read_only=True)
 
-class ArticleLikeSerializer(serializers.ModelSerializer) :
-    class Meta :
-        model = ArticleLike
-        fields = "__all__"
-
     def to_representation(self, instance):
         representation = super().to_representation(instance)
-        representation['like_count'] = instance.like_count.count()
+        representation['like_count'] = ArticleLike.objects.filter(article_id=instance.id).count()
         return representation
