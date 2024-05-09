@@ -12,7 +12,6 @@ class UserAPIView(APIView):
         data = request.data
         email = data.get("email")
         username = data.get("username")
-        gender = data.get("gender")
     # 유사성검사
         if not email or not username:
             return Response({"error": "email or username is required"}, status=400)
@@ -24,22 +23,17 @@ class UserAPIView(APIView):
             return Response({"error": "username exists"}, status=400)
 
     # 선택적 성별 값 설정
-        # "M" (남성)과 "F" (여성)만 허용, 또는 값이 없는 경우
-        if gender not in ["M", "F", None]:
-            return Response({"error": "Invalid gender value"}, status=400)
 
         user = get_user_model().objects.create_user(
             username=username,
             email=email,
             password=data.get("password"),
-            gender=gender
         )
         return Response(
             {
                 "id": user.id,
                 "username": user.username,
                 "email": user.email,
-                "gender": user.gender
             },
             status=201,
         )
