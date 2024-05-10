@@ -63,10 +63,10 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-#프론트엔드 주소
-CORS_ALLOWED_ORIGINS = [
-    "http://localhost:3000/",  
-]
+# #프론트엔드 주소
+# CORS_ALLOWED_ORIGINS = [
+#     "http://localhost:3000/",  
+# ]
 
 ROOT_URLCONF = 'spartaNews.urls'
 

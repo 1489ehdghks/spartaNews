@@ -44,6 +44,7 @@ class UserAPIView(APIView):
             status=201,
         )
 
+class UserDeleteAPIView(APIView) :
     # 로그인 된 상태에서 비밀번호 입력하면 계정 탈퇴
     def delete(self, request):
         password = request.data.get("password")
