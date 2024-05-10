@@ -100,7 +100,7 @@ GeekNews와 같은 레퍼런스를 토대로 뉴스 페이지를 만드는 프�
 
 ## 🚀 ERD
 
-![spartaNews_ERD](https://github.com/1489ehdghks/spartaNews/assets/157605815/8031e270-8c83-4d54-9215-32b6a40d6886)
+![spartaNews_ERD(1)](https://github.com/1489ehdghks/spartaNews/assets/157605815/a96dbc74-2f3e-4b7b-8940-88a8f52c2d8c)
 
 <br/>
 
