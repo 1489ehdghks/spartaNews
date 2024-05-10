@@ -36,7 +36,6 @@ GeekNews와 같은 레퍼런스를 토대로 뉴스 페이지를 만드는 프�
 #### 1. 회원가입
   - username, email, password (필수사항) / gender (선택사항)
   - username, email 중복 체크
-  - gender는 선택사항이나 "F", "M" 외에는 입력 불가능
   - password 암호화 (SHA-256)
 #### 2. 로그인
   - DB 값 검증
@@ -48,6 +47,7 @@ GeekNews와 같은 레퍼런스를 토대로 뉴스 페이지를 만드는 프�
 #### 4. 회원정보 수정
   - 해당 유저에 한해 회원정보 수정 가능
   - username, email, gender 수정
+  - gender는 선택사항이나 "F", "M" 외에는 입력 불가능
 #### 5. 회원 탈퇴
   - 로그인 상태에서 비밀번호 입력 시 계정탈퇴 
 <br/>
