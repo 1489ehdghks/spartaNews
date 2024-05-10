@@ -11,8 +11,8 @@ const ArticleDetailPage = () => {
     const { isLoggedIn } = useContext(AuthContext);
     const [article, setArticle] = useState(null);
     const [comments, setComments] = useState([]);
-    const [username, setUsername] = useState([]);
     const [newComment, setNewComment] = useState('');
+    const [currentUserId, setCurrentUserId] = useState(null);
     const [error, setError] = useState(null);
 
 
@@ -34,6 +34,8 @@ const ArticleDetailPage = () => {
             }
         };
 
+        const userId = localStorage.getItem('userId');
+        setCurrentUserId(userId);
         fetchArticle();
     }, [id]);
 
@@ -53,15 +55,17 @@ const ArticleDetailPage = () => {
             navigate('/login');
             return;
         }
+
         const userId = localStorage.getItem('userId');
 
         try {
+            // 서버에 댓글 작성 요청
             const response = await axiosInstance.post(`/articles/${id}/comments/`, {
                 content: newComment,
                 user_id: userId,
             });
-            console.log("response:", response)
 
+            // 새로 작성된 댓글을 목록에 추가
             setComments((prevComments) => [...prevComments, response.data]);
             setNewComment('');
         } catch (err) {
@@ -131,16 +135,19 @@ const ArticleDetailPage = () => {
                     comments.map((comment) => (
                         <div key={comment.id} className="mb-4 p-4 border-b border-gray-200 flex justify-between">
                             <div>
-                                <h2>{comment.username}</h2><p>{comment.content}</p>
+                                <h2 className="text-lg font-bold text-blue-600">{comment.user_id}</h2>
+                                <p>{comment.content}</p>
                                 <div className="text-sm text-gray-500">{new Date(comment.created_at).toLocaleDateString()}</div>
                             </div>
                             {/* 댓글 삭제 버튼 */}
-                            <button
-                                onClick={() => handleCommentDelete(comment.id)}
-                                className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
-                            >
-                                삭제
-                            </button>
+                            {comment.user_id == currentUserId && (
+                                <button
+                                    onClick={() => handleCommentDelete(comment.id)}
+                                    className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
+                                >
+                                    삭제
+                                </button>
+                            )}
                         </div>
                     ))
                 )}

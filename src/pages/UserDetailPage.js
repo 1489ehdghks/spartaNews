@@ -1,4 +1,3 @@
-// UserDetailPage.js
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axiosInstance from '../axiosInstance/axiosInstance';
@@ -35,21 +34,39 @@ const UserDetailPage = () => {
     const handleUpdate = async (e) => {
         e.preventDefault();
         try {
-            await axiosInstance.put(`/users/${username}/`, userInfo);
-            setSuccessMessage('유저 정보가 성공적으로 업데이트되었습니다.');
-        } catch (error) {
-            console.log("userInfo:", userInfo)
-            setErrorMessage('유저 정보 업데이트에 실패했습니다.');
 
+            const updatedData = {
+                id: userInfo.id,
+                username: userInfo.username || '',
+                email: userInfo.email || '',
+                gender: userInfo.gender || '',
+            };
+
+
+            const response = await axiosInstance.put(`/users/${username}/`, updatedData);
+            const newUsername = response.data.username;
+            localStorage.setItem('username', newUsername);
+
+            setSuccessMessage('유저 정보가 성공적으로 업데이트되었습니다.');
+            setErrorMessage('');
+            navigate(`/users/${newUsername}`);
+
+        } catch (error) {
+            console.log("Error response:", error.response?.data);
+            setErrorMessage('유저 정보 업데이트에 실패했습니다.');
+            setSuccessMessage('');
         }
     };
 
     // 계정 탈퇴 요청
     const handleDelete = async () => {
         try {
+            // 사용자 삭제 요청
             await axiosInstance.delete(`/users/${username}/`);
+
+            // 삭제 성공 메시지와 이동
             alert('계정이 삭제되었습니다.');
-            navigate('/signup');
+            navigate('/signup'); // 탈퇴 후 회원가입 페이지로 이동
         } catch (error) {
             setErrorMessage('계정 삭제에 실패했습니다.');
         }
@@ -85,6 +102,17 @@ const UserDetailPage = () => {
                         required
                     />
                 </div>
+                <div>
+                    <label className="block text-sm font-medium text-gray-700">성별</label>
+                    <input
+                        type="text"
+                        name="gender"
+                        value={userInfo.gender || ''}
+                        onChange={handleInputChange}
+                        className="w-full p-2 border border-gray-300 rounded"
+                        placeholder="성별"
+                    />
+                </div>
                 <button
                     type="submit"
                     className="py-2 px-4 bg-blue-500 text-white rounded hover:bg-blue-600"
@@ -92,14 +120,6 @@ const UserDetailPage = () => {
                     업데이트
                 </button>
             </form>
-            <div className="mt-6">
-                <button
-                    onClick={handleDelete}
-                    className="py-2 px-4 bg-red-500 text-white rounded hover:bg-red-600"
-                >
-                    계정 삭제
-                </button>
-            </div>
         </div>
     );
 };

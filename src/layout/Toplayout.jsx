@@ -28,9 +28,8 @@ const TopLayout = () => {
                 </div>
                 <div className="space-x-4">
                     <Link to="/latest" className="text-blue-500 hover:text-blue-600">최신글</Link>
-                    <Link to="/magazine" className="text-blue-500 hover:text-blue-600">인기글</Link>
-                    <Link to="/ask" className="text-blue-500 hover:text-blue-600">글등록</Link>
-                    <Link to="/weekly" className="text-blue-500 hover:text-blue-600">Weekly</Link>
+                    <Link to="/old" className="text-blue-500 hover:text-blue-600">오래된글</Link>
+                    <Link to="/articles" className="text-blue-500 hover:text-blue-600">글등록</Link>
                     <Link onClick={handleMarqueeToggle} className="text-blue-500 hover:text-blue-600">/</Link>
                     {isLoggedIn && <Link to={`/users/${username}`} className="text-blue-500 hover:text-blue-600">내정보</Link>}
                 </div>
