@@ -34,11 +34,22 @@ GeekNews와 같은 레퍼런스를 토대로 뉴스 페이지를 만드는 프�
 ### 1. 계정(account) 관련 기능 - 회원가입, 로그인, 로그아웃, 회원정보수정, 회원 탈퇴
 
 1. 회원가입
+  - username, email, password (필수사항) / gender (선택사항)
+  - username, email 중복 체크
+  - gender는 선택사항이나 "F", "M" 외에는 입력 불가능
+  - password 암호화 (SHA-256)
 2. 로그인
+  - DB 값 검증
+  - username, password 입력 필요
+  - 로그인 성공 시, access, refresh 토큰 발
 3. 로그아웃
+  - blacklist 생성을 통해 refresh 토큰 만료
+  - 로그인 상태 확인 > refresh 토큰값을 보유하고 있는 것을 통해 이미 로그인 상태라고 인지
 4. 회원정보 수정
+  - 해당 유저에 한해 회원정보 수정 가능
+  - username, email, gender 수정
 5. 회원 탈퇴
-
+  - 로그인 상태에서 비밀번호 입력 시 계정탈퇴 
 <br/>
 
 ### 2. 기사(article) 관련 기능
