@@ -28,6 +28,7 @@ const SignupPage = () => {
             });
             const { id } = response.data;
             localStorage.setItem('userId', id);
+            localStorage.setItem('username', username);
             console.log("response:", response)
             console.log("username:", username)
             navigate('/login');

@@ -5,7 +5,7 @@ import './MarqueeOverlay.css';
 
 
 const TopLayout = () => {
-    const { isLoggedIn, logout } = useContext(AuthContext);
+    const { isLoggedIn, username, logout } = useContext(AuthContext);
     const [showMarquee, setShowMarquee] = useState(false);
     const navigate = useNavigate();
 
@@ -32,7 +32,7 @@ const TopLayout = () => {
                     <Link to="/ask" className="text-blue-500 hover:text-blue-600">글등록</Link>
                     <Link to="/weekly" className="text-blue-500 hover:text-blue-600">Weekly</Link>
                     <Link onClick={handleMarqueeToggle} className="text-blue-500 hover:text-blue-600">/</Link>
-                    {isLoggedIn && <Link to="/userinfo" className="text-blue-500 hover:text-blue-600">내정보</Link>}
+                    {isLoggedIn && <Link to={`/users/${username}`} className="text-blue-500 hover:text-blue-600">내정보</Link>}
                 </div>
                 <button
                     onClick={handleAuthAction}

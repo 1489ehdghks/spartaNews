@@ -11,6 +11,7 @@ const ArticleDetailPage = () => {
     const { isLoggedIn } = useContext(AuthContext);
     const [article, setArticle] = useState(null);
     const [comments, setComments] = useState([]);
+    const [username, setUsername] = useState([]);
     const [newComment, setNewComment] = useState('');
     const [error, setError] = useState(null);
 
@@ -25,6 +26,7 @@ const ArticleDetailPage = () => {
                 //comment
                 const commentsResponse = await axiosInstance.get(`/articles/${id}/comments/`);
                 setComments(commentsResponse.data);
+                console("commentsResponse.data:", commentsResponse.data)
                 console("ArticleResponse:", response)
                 console("CommentsResponse:", commentsResponse)
             } catch (err) {
@@ -52,10 +54,11 @@ const ArticleDetailPage = () => {
             return;
         }
         const userId = localStorage.getItem('userId');
+
         try {
             const response = await axiosInstance.post(`/articles/${id}/comments/`, {
                 content: newComment,
-                user_id: "1",
+                user_id: userId,
             });
             console.log("response:", response)
 
@@ -70,6 +73,14 @@ const ArticleDetailPage = () => {
         if (e.key === 'Enter' && !e.shiftKey) {
             e.preventDefault();
             handleCommentSubmit(e);
+        }
+    };
+    const handleCommentDelete = async (commentId) => {
+        try {
+            await axiosInstance.delete(`/articles/comments/${commentId}/`);
+            setComments((prevComments) => prevComments.filter(comment => comment.id !== commentId));
+        } catch (err) {
+            setError('댓글 삭제에 실패했습니다.');
         }
     };
 
@@ -99,6 +110,7 @@ const ArticleDetailPage = () => {
                     <textarea
                         value={newComment}
                         onChange={handleCommentChange}
+                        onKeyDown={handleKeyPress}
                         placeholder="댓글을 입력하세요..."
                         className="w-full p-2 border border-gray-300 rounded"
                         rows={3}
@@ -117,9 +129,18 @@ const ArticleDetailPage = () => {
                     <p>댓글이 없습니다.</p>
                 ) : (
                     comments.map((comment) => (
-                        <div key={comment.id} className="mb-4 p-4 border-b border-gray-200">
-                            <p>{comment.content}</p>
-                            <div className="text-sm text-gray-500">{new Date(comment.created_at).toLocaleDateString()}</div>
+                        <div key={comment.id} className="mb-4 p-4 border-b border-gray-200 flex justify-between">
+                            <div>
+                                <h2>{comment.username}</h2><p>{comment.content}</p>
+                                <div className="text-sm text-gray-500">{new Date(comment.created_at).toLocaleDateString()}</div>
+                            </div>
+                            {/* 댓글 삭제 버튼 */}
+                            <button
+                                onClick={() => handleCommentDelete(comment.id)}
+                                className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
+                            >
+                                삭제
+                            </button>
                         </div>
                     ))
                 )}
