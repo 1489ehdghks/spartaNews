@@ -14,8 +14,15 @@ GeekNews와 같은 레퍼런스를 토대로 뉴스 페이지를 만드는 프�
 
 <br/>
 
+## 👥멤버 구성
+- 이환희(팀장) : 댓글 CRUD 기능, 대댓글 CRUD 기능, README 작성
+- 김동환(팀원) : 계정 CRUD 기능, ERD diagram 작성, 프론트엔드 구현
+- 김시은(팀원) : 발표자료 및 발표
+- 이혜민(팀원) : 게시글 CRUD 기능, README작성, API 작성
+
 ## 🖥️개발 환경
 - Python : Django, DRF
+- JavaScript : React
 - DB : SQLite
 
 <br/>
