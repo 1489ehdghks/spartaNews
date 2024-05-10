@@ -10,37 +10,52 @@ from .serializers import ArticleDetailSerializer, ArticleSerializer, CommentSeri
 from django.core import serializers
 from django.db.models import Q
 
-class ArticleListAPIView(ListAPIView) :
+
+class ArticleListAPIView(ListAPIView):
     permission_classes = [IsAuthenticatedOrReadOnly]
     queryset = Article.objects.all().order_by('-create_at')
     serializer_class = ArticleSerializer
     # return Response(serializers.data)
-    def post(self, request) :
-        serializers = ArticleSerializer(data = request.data)
-        if serializers.is_valid(raise_exception = True) :
-            serializers.save()
-            return Response(serializers.data, status=201)
 
-class ArticleDetailAPIView(APIView) :
+    def post(self, request):
+        serializer = ArticleSerializer(
+            data=request.data, context={'request': request})
+        if serializer.is_valid(raise_exception=True):
+            serializer.save()
+            return Response(serializer.data, status=201)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class OldArticleListAPIView(ListAPIView):
+    permission_classes = [IsAuthenticatedOrReadOnly]
+    queryset = Article.objects.all().order_by('-create_at')
+    serializer_class = ArticleSerializer
+
+
+class ArticleDetailAPIView(APIView):
     permission_classes = [IsAuthenticatedOrReadOnly]
     # 상세 조회
-    def get(self, request, article_id) :
-        article = get_object_or_404(Article, id = article_id)
+
+    def get(self, request, article_id):
+        article = get_object_or_404(Article, id=article_id)
         serializer = ArticleDetailSerializer(article)
         return Response(serializer.data)
     # 기사 수정
-    def put(self, request, article_id) :
-        article = get_object_or_404(Article, id = article_id)
-        if article.user_id == request.user.id :
-            serializer = ArticleDetailSerializer(article, data = request.data, partial = True)
-            if serializer.is_valid(raise_exception=True) :
+
+    def put(self, request, article_id):
+        article = get_object_or_404(Article, id=article_id)
+        if article.user_id == request.user.id:
+            serializer = ArticleDetailSerializer(
+                article, data=request.data, partial=True)
+            if serializer.is_valid(raise_exception=True):
                 serializer.save()
                 return Response(serializer.data)
         return Response(status=401)
-    # 기사 삭제 
-    def delete(self, request, article_id) :
-        article = get_object_or_404(Article, id = article_id)
-        if article.user_id == request.user.id :
+    # 기사 삭제
+
+    def delete(self, request, article_id):
+        article = get_object_or_404(Article, id=article_id)
+        if article.user_id == request.user.id:
             article.delete()
             return Response("No Article", status=204)
 
@@ -80,25 +95,28 @@ class CommentDetailAPIView(APIView):
             return Response(serializer.data)
 
 
-class ArticleLikeAPIView(APIView) :
+class ArticleLikeAPIView(APIView):
     permission_classes = [IsAuthenticated]
-    def post(self, request, article_id) :
+
+    def post(self, request, article_id):
         article = get_object_or_404(Article, pk=article_id)
-        article_like = ArticleLike.objects.filter(user=request.user, article=article)
+        article_like = ArticleLike.objects.filter(
+            user=request.user, article=article)
         if not article_like.exists():
             like = ArticleLike(user=request.user, article=article)
             like.save()
-            return Response("Like",status=201)
-        else :
+            return Response("Like", status=201)
+        else:
             return Response("Already Exist", status=400)
 
-    def delete(self, request, article_id) :
+    def delete(self, request, article_id):
         article = get_object_or_404(Article, pk=article_id)
-        article_like = ArticleLike.objects.filter(user=request.user, article=article)
+        article_like = ArticleLike.objects.filter(
+            user=request.user, article=article)
         if article_like.exists():
             article_like.delete()
-            return Response("Unlike",status=204)
-        else :
+            return Response("Unlike", status=204)
+        else:
             return Response("Not exist", status=400)
 
 
@@ -108,8 +126,10 @@ class CommentReplyAPIView(APIView):
         parent_comment = get_object_or_404(Comment, pk=comment_id)
         serializer = ReplySerializer(data=request.data)
         if serializer.is_valid(raise_exception=True):
-            serializer.save(article=parent_comment.article, parent_comment=parent_comment)
+            serializer.save(article=parent_comment.article,
+                            parent_comment=parent_comment)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
+
 
 class CommentReplyDetailAPIView(APIView):
   # 대댓글 조회하기
@@ -125,7 +145,7 @@ class CommentReplyDetailAPIView(APIView):
         reply = get_object_or_404(parent_comment.replies.all(), pk=reply_id)
         reply.delete()
         return Response("re-comment delete ", status=status.HTTP_200_OK)
-    
+
     # 대댓글 수정하기
     def put(self, request, parent_comment_id, reply_id):
         parent_comment = get_object_or_404(Comment, pk=parent_comment_id)
